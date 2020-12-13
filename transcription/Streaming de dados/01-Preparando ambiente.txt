@@ -1,0 +1,7 @@
+Nesse curso, precisaremos que tanto o Node.js quanto o MySQL estejam instalados em sua máquina.
+
+Além disso, também precisamos que tenha o projeto do curso anterior baixado e instalado com o npm install (ou com outro gerenciador de pacotes de sua preferência).
+
+Também utilizaremos o Postman para consumir nossas rotas.
+
+Tudo pronto? Vamos começar?
