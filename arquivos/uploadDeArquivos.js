@@ -1,6 +1,5 @@
 const fs = require("fs")
 
-fs.readFile("../assets/salsicha.png", (erro, buffer)=>{
-	console.log("imagem foi bufferizada!")
-	console.log(buffer)
-})
+fs.createReadStream("../assets/salsicha.png")
+	.pipe(fs.createWriteStream('../assets/salsicha-stream.png'))
+	.on('finish', () => console.log("Imagem foi escrita com sucesso!"))
