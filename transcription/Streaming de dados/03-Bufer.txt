@@ -1,0 +1,70 @@
+Seria interessante se além de ter nossa tabela com todas as informações, conseguíssemos saber um pouco mais sobre nosso patch.
+
+Devemos saber o nome dele, o que já temos, e também ter alguma imagem do patch salva para conseguir verificar com o que teremos que trabalhar, qual animal chegou para nós durante o atendimento. Então, vamos trabalhar com imagens.
+
+À esquerda da tela do Visual Studio Code haverá a pasta "assets", e dentro dela a imagem de um cachorro salsicha "salsicha.jpg". Queremos subir a imagem para nosso servidor, e para conseguirmos, precisamos entender como funcionará o sistema de File System, ou seja, como o Node trabalha com arquivos do nosso sistema.
+
+Criaremos uma nova pasta no projeto, chamada "arquivos". Dentro dela vamos gerar um arquivo chamado "uploadDeArquivos.Js".
+
+A primeira coisa a entender será que trabalharemos com um modo chamado fs, de File System, o sistema de arquivos. Vamos fazer a importação desse módulo com const fs = require(), passando 'fs'dentro dos parâmetros.
+
+Faremos o upload da imagem por meio de um Buffer. Assim, trabalharemos com ela já dentro do nosso código Node. Digitaremos fs. e será mostrada uma lista de métodos. Usaremos o readFile(), que poderá receber até 3 parâmetros.
+
+O primeiro parâmetro será o caminho do arquivo que queremos subir. Nossa imagem está dentro de "assets", então o caminho será '../assets/salsicha.jpg'.
+
+O segundo parâmetro poderá ser omitido, e ele será o parâmetro que oferece algumas configurações que precisamos trabalhar, como o tipo de arquivo.
+
+O terceiro parâmetro será uma função de call back . Por ora não preencheremos essa função, mas um parãmetro que ela poderá receber será o erro. Então, havendo algum erro, já será colocada uma Exception (exceção) para nós.
+
+Outro parâmetro dessa função será o buffer de memória que salvamos. (erro, buffer) => {}.
+
+Com esse código, já conseguiremos executar alguma ação. Então, na hora que ele terminar de fazer a leitura, executará essa função de call back . Nesse caso, assim que terminar de ler, o código adicionará o arquivo no buffer de memória e então passará para nós a informação salva no buffer.
+
+Então, por enquanto, quando essa ação for efetuada, adicionaremos um console.log() nos alertando de que a imagem foi bufferizada. Na outra linha, faremos mais um console.log() para saber o que há no buffer.
+
+
+const fs = require('fs')
+
+fs.readFile('../assets/salsicha.jpg', (erro, buffer) = > { 
+    console.log('imagem foi bufferizada')
+    console.log(buffer)
+})
+
+Precisamos executar isso. Porém, por mais que nosso servidor esteja rodando, o código ainda não tem nenhuma ligação com ele. Então, nesse momento, o que podemos fazer é executar o arquivo "uploadDeArquivos.js" diretamente, digitando node ./arquivos/uploadDeArquivos.js no terminal.
+
+O resultado será "undefined", porque a referência do caminho sempre estará de acordo com o local em que executamos o arquivo. Nesse caso, podemos deixar um caminho relativo './assets/salsicha.jpg' nos parâmetros do método fs.readFile().
+
+Podemos suprimir o primeiro ponto "." porque estamos executando de dentro do arquivo, mas de dentro do projeto atual, a pasta acima das demais na barra lateral.
+
+Outra opção será entrar dentro da pasta com um cd (comando) e então executar. Já teremos alterado o caminho no primeiro parâmetro de fs.readFile(), agora executaremos no terminal e a imagem será bufferizada.
+
+Teremos um buffer de memória com os dados referentes, e claro, não precisamos saber os valores que aparecerão, pois não trabalharemos com eles. Bastará que eles estejam salvos.
+
+Para saber se isso realmente estará funcionando, uma vez que não entendemos todos esses valores, vamos tentar novamente salvar uma outra imagem. Haverá outra função, fs.writeFile, e por meio dela poderemos escrever um arquivo (além de ler, com o método usado anteriormente).
+
+Também será necessário passar alguns parâmetros para essa função. O primeiro será o nome do arquivo que queremos salvar e o caminho. Passaremos './assets/salsicha2.jpg'.
+
+Mais uma vez haverá as configurações que podemos passar, que se tratariam das opções de escrita e decodificação do nosso arquivo. A opção de escrita mais importante que precisaremos passar nesse momento se trata daquilo que temos que escrever, o que está no buffer.
+
+Depois, novamente teremos a função de call back como terceiro parâmetro, seguindo o mesmo padrão da primeira. Depois da escrita, alguma ação será executada. Então, receberemos o erro
+
+Acrescentaremos um console.log() para informar que a imagem foi escrita. Removeremos o print do buffer, porque ele não será mais necessário.
+
+
+const fs = require('fs')
+
+fs.readFile('./assets/salsicha.jpg', (erro, buffer) = > { 
+    console.log('imagem foi bufferizada')
+
+    fs.writeFile('./assets/salsicha2.jpg', buffer (erro) = > { 
+        console.log('imagem foi escrita')
+    })
+})
+
+Executaremos o arquivo para ver o que vai acontecer, e será criado um novo arquivo, "salsicha2.jpg", exatamente igual ao anterior. Logo, foi feita a leitura do arquivo, que foi salvo no buffer de memória, e depois o que estava no buffer foi lido para nós.
+
+Essa será uma das formas de trabalhar, mas ela terá um problema. Como estamos fazendo uma função de call back, se tivermos um arquivo muito pesado, como uma imagem muito grande, talvez demore muito para a leitura acontecer, pois durar muito tempo até terminar de ler e depois passar a função.
+
+Como ela é uma função síncrona, se houver uma parada no procedimento, é travada a execução do nosso código.
+
+Veremos a seguir como resolver isso.

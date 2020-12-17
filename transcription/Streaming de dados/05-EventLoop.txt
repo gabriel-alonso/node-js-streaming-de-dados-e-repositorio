@@ -1,0 +1,19 @@
+Como a stream trabalha com eventos, precisamos entender como o Node Javascript lida com eventos.
+
+Entenderemos o que é EventLoop, o nome de como o Node trabalha com eventos e processos assíncronos de modo geral, e como esse fluxo funciona.
+
+Antes de mais nada, algo assíncrono acontecerá em paralelo com outros processos. Então, se algo está acontecendo, ao invés de primeiro tudo terminar de acontecer em uma linha temporal, sairemos dessa linha e outro procedimento ocorrerá ao mesmo tempo. Só que isso pode ser um pouco confuso, já que o Node é Single Thread, ou seja, só tem a capacidade de executar uma coisa de cada vez.
+
+Mas isso não é exatamente verdade. O que é de fato Single Thread é o V8, o motor que roda o Node. Ainda assim, conseguiremos transferir eventos assíncronos para outros lugares e trabalhar de forma assíncrona.
+
+Acompanharemos como isso funciona. Vamos supor que temos nosso código Javascript e alguns eventos, três deles síncronos e outros dois assíncronos.
+
+Nossa Stack JS representará tudo o que será executado pelo Javascript. Ele lerá todo o código e executará o que for síncrono, por ser o que precisará de uma sequência, e só depois o que for assíncrono, mesmo que a resposta seja instantânea.
+
+Esses dois eventos assíncronos não serão executados pelo motor do Javascript em si, mas por um terceiro. Quem será esse terceiro? Se usarmos o Javascript no Web Browser, ele poderá ser executado por uma Web EPI. Outra possibilidade é que eles sejam executados pela EPI do C++, por exemplo, entre outros lugares onde conseguimos executá-los.
+
+O importante é saber que não será o Javascript a rodar esses dois códigos assíncronos. Ele enviará os eventos para serem executados em outra EPI e ela os devolverá para uma fila ou pilha de Callback. Então, conforme eles entrarão em ordem e chegarão à nossa fila, voltarão ao nosso fluxo de informações normal, dentro do código. Assim, conseguiremos enviar o resultado para o Javascript.
+
+Esse será o funcionamento básico do EventLoop do Javascript. Então, a primeira coisa importante para lembrar é que o Javascript não é exatamente Single Thread, mas também não tem múltiplas threads. Ainda assim, há a possibilidade de executar alguns eventos assíncronos, executando os síncronos, primeiramente.
+
+Só de conseguir diferenciar esses processos, já conseguimos entender, por exemplo, por que quando executamos um evento com um setTimeout() de 0 segundos (ou seja,que teoricamente não demoraria nenhum tempo de execução), ele só será executado após o que for síncrono.

@@ -1,0 +1,9 @@
+Stream é uma instância da classe EventEmitter, que está dentro do módulo nativo events (eventos).
+
+Todo EventEmitter emite:
+
+o evento “newListener” quando um novo listener é adicionado
+e “removeListener” quando um listener é removido.
+Legal, mas no que isso importa pra gente? Bom, esses eventos são ouvidos por um listener e, como a stream é uma instância da classe EventEmitter, ela também trabalha esperando por eventos serem desencadeados, emite eventos que adicionam e removem listeners e, dessa forma, entram no event loop do javascript!
+
+Além do módulo events, o Node.js possui diversos outros módulos nativos compilados em binário à nossa disposição que você pode conferir na página de Core Modules do Node.js.

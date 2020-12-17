@@ -1,0 +1,1 @@
+Enquanto o buffer funciona de forma síncrona, a stream trabalha de forma assíncrona.
